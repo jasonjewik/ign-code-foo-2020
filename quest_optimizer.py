@@ -17,7 +17,9 @@ def optimize_quest_list(df, remaining_quests):
         assert cur_row in df.index, "Invalid current row index!"
 
         cur_date = df.at[cur_row, 'start_date']
-        cur_duration = df.at[cur_row, 'duration']  
+        cur_duration = df.at[cur_row, 'duration']
+        assert cur_date > 0 and cur_duration > 0, "Invalid date and/or duration!"
+
         cur_rwd = df.at[cur_row, 'reward']
 
         for j in range(i + 1, len(remaining_quests)):
