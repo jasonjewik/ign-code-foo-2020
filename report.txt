@@ -1,0 +1,101 @@
+---
+Explanation of Implementation
+---
+My solution to this problem can be broken down into a few key steps.
+    
+    1. Load quests from the selected CSV file and order them by start date.
+
+    2. Adjust the rewards of the remaining quests.
+        
+        First create a list of valid quests (i.e. quests whose start time and 
+        duration do not overlap with quests currently in our list of selected 
+        quests). Each of these quests will have their reward adjusted based on 
+        the opportunity cost.
+        
+        For example:
+        +========================================+
+        | Quest Name | Reward | Start | Duration |
+        |============+========+=======+==========|
+        | Hire Me    | 200    | 1     | 4        |
+        | I'm A      | 400    | 2     | 2        |
+        | Qualified  | 100    | 2     | 1        |
+        | Candidate  | 1000   | 3     | 5        |
+        +========================================+ 
+
+        In this case, the quest "Hire Me", would have an adjusted reward value
+        of 200 - 400 - 100 - 1000 = -1300. The rewards of the quests that overlap
+        with its duration are subtracted to signal how much we are giving up
+        in order to take the quest "Hire Me".
+
+        On the other hand, "Candidate" would have an adjusted reward value of 1000
+        since nothing has to be given up in order to take the quest.
+
+    3. Pick the quests with positive adjusted cost, highest to lowest, and remove
+       the invalidated quests.
+
+        Quests are appended to the solution in order from highest adjusted cost
+        (i.e. few things need to be sacrificed to take the quest) to lowest 
+        adjusted cost. As quests are added to the solution, invalidated quests
+        (i.e. quests that overlap with the chosen ones) are removed from our list
+        of remaining quests. 
+
+        This could potentially mean that if we have a list such as:
+            Quest List (ID, Adjusted Reward) --
+            [[1, 500], [2, 400], [5, 10], [3, -40]]
+        and quest 1 overlaps with quest 2, then the algorithm will invalidate
+        quest 2, and skip to quest 5 when searching for the next quest to add 
+        to the solution (assuming 5 is not also invalidated).
+
+    4. Fill the remaining intervals
+
+        I call the space between the selected quests "intervals". That is to say,
+        if the first quest in our solution (ordered by start date) is the 7th quest
+        in the list produced by step 1, then the first interval is the subset of
+        the first six quests that are still considered valid.
+
+        For example:
+        +========================================+
+        | Quest Name | Reward | Start | Duration |
+        |============+========+=======+==========|
+        | Ain't This | 200    | 1     | 4        |
+        | A Lovely   | 400    | 2     | 2        |
+        | Looking    | 100    | 2     | 1        |
+        | Table      | 325    | 4     | 5        |
+        | Graphic    | 1000   | 3     | 5        |
+        +========================================+
+
+        Ignoring the results of the other steps, let's just say that the quest
+        "Graphic" is the chosen quest. Such a choice would invalidate the quest
+        "Table" and "Ain't This" because their durations overlap with start time
+        of "Graphic". Therefore, the interval would consist of "A Lovely" and
+        "Looking".
+
+        4a. If the interval can only be filled by one quest
+
+            In this case, the algorithm will pick the quest with the highest
+            reward. No adjustments are necessary since all other quests must
+            be invalidated to pick one for our solution.
+
+        4b. If the interval can be filled by multiple quests
+
+            Repeat step 2, using the interval as the remaining quests. Then
+            append the result of this recursive call to the current result.
+
+    5. Return the quests Link should embark on, sorted by start date, ascending.
+    
+---
+Versatility and Efficiency
+---
+My solution is successful with other quests boards (try using quests1.csv,
+quests2.csv, and quests3.csv). 
+
+My solution may not be highly efficient. It relies on maintaining sorted lists 
+or dictionaries of quests and has a lot of nested loops. However, many of these
+nested loops have break conditions that would cause them to almost always
+terminate early. Seeing as I just took a class on Data Structures and Algorithms
+last quarter, and that my algorithm isn't perfectly straight forward, I'm not 
+too certain on the time complexity of my solution. 
+
+I can at least verify that my solution calls `optimize_quest_list()` 4 times.
+The first call is done on the entire list of quests, and remaining calls are
+made on intervals within that list of quests.
