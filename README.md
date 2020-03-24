@@ -1,10 +1,10 @@
 # ign-code-foo-2020
 
-### Instructions
+### Instructions for LOZ Quests
 1. Download and unzip or clone this repository.
-2. Create a virtual environment with Python 3, then run `pip install -r requirements.txt` in the project's root directory.
+2. Create a virtual environment with Python 3, then run `pip install -r requirements.txt` in the `loz_quests` folder.s
 3. Run the program using `py quest_optimizer.py -f [FILENAME]` or `python3 quest_optimizer.py -f [FILENAME]`, depending on your OS.
-	* [FILENAME] is the relative path to the CSV file to use. For example, to run this program on the sample data provided by IGN, FILENAME would be `quests.csv`.
+	* [FILENAME] is the relative path to the CSV file to use. For example, to run this program on the sample data provided by IGN, FILENAME would be `data\quests.csv`.
 4. The results will be printed to the command line.
 
 #### Example for Windows:
@@ -16,30 +16,13 @@ remote: Compressing objects: 100% (16/16), done.
 remote: Total 21 (delta 7), reused 18 (delta 4), pack-reused 0
 Unpacking objects: 100% (21/21), done.
 
-PS E:\GitHub> cd ign-code-foo-2020
+PS E:\GitHub> cd ign-code-foo-2020\loz_quests
 
-PS E:\GitHub\ign-code-foo-2020> py -m venv env
+PS E:\GitHub\ign-code-foo-2020\loz_quests> py -m venv env
 
-PS E:\GitHub\ign-code-foo-2020> ls                                          
+PS E:\GitHub\ign-code-foo-2020\loz_quests> env/scripts/activate
 
-    Directory: E:\GitHub\ign-code-foo-2020
-
-
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
-d-----        3/23/2020   3:29 PM                env
--a----        3/23/2020   3:27 PM             16 .gitignore
--a----        3/23/2020   3:27 PM           1462 quests.csv
--a----        3/23/2020   3:27 PM            308 quests1.csv
--a----        3/23/2020   3:27 PM           1462 quests2.csv
--a----        3/23/2020   3:27 PM           1462 quests3.csv
--a----        3/23/2020   3:27 PM           5981 quest_optimizer.py
--a----        3/23/2020   3:27 PM           4876 report.txt
--a----        3/23/2020   3:27 PM            164 requirements.txt
-
-PS E:\GitHub\ign-code-foo-2020> env/scripts/activate
-
-(env) PS E:\GitHub\ign-code-foo-2020> pip install -r requirements.txt
+(env) PS E:\GitHub\ign-code-foo-2020\loz_quests> pip install -r requirements.txt
 Collecting numpy==1.18.2 (from -r requirements.txt (line 1))
   Using cached https://files.pythonhosted.org/packages/f9/50/cd3e12bf41ac273702882610fd43bd765b8d2b99baf4295b00578fd69323/numpy-1.18.2-cp37-cp37m-win_amd64.whl
 Collecting pandas==1.0.3 (from -r requirements.txt (line 2))
@@ -53,7 +36,7 @@ Collecting six==1.14.0 (from -r requirements.txt (line 5))
 Installing collected packages: numpy, pytz, six, python-dateutil, pandas
 Successfully installed numpy-1.18.2 pandas-1.0.3 python-dateutil-2.8.1 pytz-2019.3 six-1.14.0
 
-(env) PS E:\GitHub\ign-code-foo-2020> py .\quest_optimizer.py -f quests.csv
+(env) PS E:\GitHub\ign-code-foo-2020\loz_quests> py .\quest_optimizer.py -f data\quests.csv
 Quest List:
         1. The Weapon Connoisseur
         2. Sunken Treasure

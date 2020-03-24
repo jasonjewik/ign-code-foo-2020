@@ -1,6 +1,6 @@
 import argparse
 import pandas as pd
-import sys
+import os
 
 def optimize_quest_list(df, remaining_quests):
     solution = list()
@@ -144,6 +144,8 @@ def main():
     args = parser.parse_args()
 
     # Read the data from the given CSV file
+    assert os.path.isfile(args.filepath), 'Data file does not exist!'
+
     df = pd.read_csv(args.filepath, header=0, 
         names=['quest','start_date','duration','reward'],usecols=[0,1,2,3])
     assert df.size > 0, "No quests found!"
