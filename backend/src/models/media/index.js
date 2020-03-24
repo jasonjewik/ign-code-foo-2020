@@ -26,11 +26,6 @@ const MediaModel = (table) => {
 
                 let errors = [];
                 
-                // Ensures that short name is set
-                if (row['short_name'] == '') {
-                    errors.push('short_name');
-                }
-                
                 // Ensures that arrays are passed
                 const arrayCols = ['genres', 'created_by', 'published_by', 'franchises', 'regions'];
                 arrayCols.forEach((colName) => {
@@ -66,13 +61,28 @@ const MediaModel = (table) => {
         readStream.pipe(csvStream);
     }
 
-    const getMediaByID = async(id) => {
-        return table.getMediaByID(id);
+    const getMediaByID = async(id, urlOnly) => {
+        return table.getMediaByID(id, urlOnly);
     }
+
+    const getMediaByPhrase = async(phrase, urlOnly) => {
+        return table.getMediaByPhrase(phrase, urlOnly);
+    }
+
+    const getMediaByPublishers = async(publishers) => {
+        return table.getMediaByPublishers(publishers);
+    };
+
+    const getMediaByCreators = async(creators) => {
+        return table.getMediaByCreators(creators);
+    };
 
     return {
         loadInitData,
-        getMediaByID
+        getMediaByID,
+        getMediaByPhrase,
+        getMediaByPublishers,
+        getMediaByCreators
     };
 }
 

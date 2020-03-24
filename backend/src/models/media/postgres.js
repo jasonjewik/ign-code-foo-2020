@@ -90,18 +90,78 @@ const MediaTable = (postgres) => {
         SELECT * FROM media WHERE id = $1
     `
 
-    const getMediaByID = async(id) => {
+    const SQL_getMediaByID_urlOnly = `
+        SELECT review_url FROM media WHERE id = $1
+    `
+
+    const getMediaByID = async(id, urlOnly) => {
         const client = await postgres.connect();
-        const res = await client.query(SQL_getMediaByID, [id]);
+        let res = null;
+        
+        if (!urlOnly)
+            res = await client.query(SQL_getMediaByID, [id]);
+        else
+            res = await client.query(SQL_getMediaByID_urlOnly, [id]);
+
         client.release();
         return res.rows[0];
     }
+
+    const SQL_getMediaByPhrase = `
+        SELECT * FROM media WHERE LEFT(LOWER(name), $1) LIKE LOWER($2)
+    `
+
+    const SQL_getMediaByPhrase_urlOnly = `
+        SELECT review_url FROM media WHERE LEFT(LOWER(name), $1) LIKE LOWER($2)
+    `;
+
+    const getMediaByPhrase = async(phrase, urlOnly) => {
+        const client = await postgres.connect();
+        let res = null;
+        
+        if (!urlOnly)
+            res = await client.query(SQL_getMediaByPhrase, [phrase.length, phrase]);
+        else
+            res = await client.query(SQL_getMediaByPhrase_urlOnly, [phrase.length, phrase]);
+        
+        client.release();
+        return res.rows;
+    }
+
+    const SQL_getMediaByPublishers = `
+        SELECT * FROM media, UNNEST(published_by) AS pb
+        WHERE pb = ANY($1)
+    `
+
+    const getMediaByPublishers = async(publishers) => {
+        const client = await postgres.connect();
+        const res = await client.query(SQL_getMediaByPublishers, [publishers]);
+
+        client.release();
+        return res.rows;
+    }
+
+    const SQL_getMediaByCreators = `
+        SELECT * FROM media, UNNEST(created_by) AS cb
+        WHERE cb = ANY($1)
+    `;
+
+    const getMediaByCreators = async(creators) => {
+        const client = await postgres.connect();
+        const res = await client.query(SQL_getMediaByCreators, [creators]);
+
+        client.release();
+        return res.rows;
+    };
 
     return {
         setupTable,
         dropTable,
         addRowsFromCSV,
-        getMediaByID
+        getMediaByID,
+        getMediaByPhrase,
+        getMediaByPublishers,
+        getMediaByCreators
     };
 }
 
